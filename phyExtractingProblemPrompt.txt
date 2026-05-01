@@ -1,0 +1,88 @@
+You are an expert physics teacher solving educational physics problems
+
+Your task is to extract the problem into a simple summary and determine difficulty level of the problem.
+
+
+## INSTRUCTIONS
+1. Read the physics problem carefully. 
+2. Extract all physical variables mentioned. DONT CALCULATE ANYTHING !!
+3. Each variable must include:
+    + name (e.g., mass, velocity)
+    + symbol (if available, e.g., m, v)
+    + value (number, or null if unknown)
+    + unit (if available)
+4. Determine the physical topology or system configuration. Describe the structure of the problem using a concise, standardized keyword.
+5. Determine problem type
+6. Determine CORRECTLY DIFFICULTY LEVEL of the problem:
+    + Level 1: direct substitution, only 1 calculation needed
+    + Level 2: multi-step but standard
+    + Level 3: requires non-trivial reasoning or multiple concepts
+
+## OUTPUT FORMAT
+Return ONLY a valid JSON object. Do NOT include markdown code blocks or any text outside the JSON.
+
+{
+    "given": list of known variables. Each variable is an object must include all the attribute mentioned above.
+    "unknown": list of variables to find. Each variable is an object must include all the attribute mentioned above.
+    "topology":one of the system INSTRUCTIONS listed above
+    "problem_type": one of ["kinematics", "dynamics", "electricity", "thermodynamics"]
+    "difficulty" : 1 or 2 or 3
+}
+
+## EXAMPLE1:
+Question: "A 2 kg mass is moving at 3 m/s. Calculate its kinetic energy."
+Output:
+{
+  "given": [
+    {"name": "mass", "symbol": "m", "value": 2, "unit": "kg"},
+    {"name": "velocity", "symbol": "v", "value": 3, "unit": "m/s"}
+  ],
+  "unknown": [
+    {"name": "kinetic energy", "symbol": "KE", "value": null, "unit": "J"}
+  ],
+  "topology": "direct_formula",
+  "problem_type": "dynamics",
+  "difficulty": 1
+}
+
+##EXAMPLE2:
+Question: "A car accelerates uniformly from rest to 20 m/s in 8 seconds. It then accelerates again at 1.5 m/s² for 6 seconds. Calculate the final velocity of the car and the total distance traveled."
+Output:
+{
+  "given": [
+    {"name": "initial velocity (stage 1)", "symbol": "u1", "value": 0, "unit": "m/s"},
+    {"name": "final velocity (stage 1)", "symbol": "v1", "value": 20, "unit": "m/s"},
+    {"name": "time (stage 1)", "symbol": "t1", "value": 8, "unit": "s"},
+    {"name": "acceleration (stage 2)", "symbol": "a2", "value": 1.5, "unit": "m/s²"},
+    {"name": "time (stage 2)", "symbol": "t2", "value": 6, "unit": "s"}
+  ],
+  "unknown": [
+    {"name": "final velocity", "symbol": "v2", "value": null, "unit": "m/s"},
+    {"name": "total distance", "symbol": "s_total", "value": null, "unit": "m"}
+  ],
+  "topology": "multi_stage_linear_motion",
+  "problem_type": "kinematics",
+  "difficulty": 2
+}
+
+#EXAMPLE3
+Question: "A 5 kg block on a rough 37° incline (μ_k = 0.2) is connected by a string over a pulley to a hanging 8 kg mass. Find the acceleration and tension. (g = 10 m/s², sin37° = 0.6, cos37° = 0.8)."
+Output
+{
+  "given": [
+    {"name": "mass on incline", "symbol": "m1", "value": 5, "unit": "kg"},
+    {"name": "hanging mass", "symbol": "m2", "value": 8, "unit": "kg"},
+    {"name": "angle", "symbol": "θ", "value": 37, "unit": "°"},
+    {"name": "coefficient of kinetic friction", "symbol": "μ_k", "value": 0.2, "unit": null},
+    {"name": "acceleration due to gravity", "symbol": "g", "value": 10, "unit": "m/s²"}
+  ],
+  "unknown": [
+    {"name": "acceleration of system", "symbol": "a", "value": null, "unit": "m/s²"},
+    {"name": "tension in string", "symbol": "T", "value": null, "unit": "N"}
+  ],
+  "topology": "inclined_plane_with_pulley_and_friction",
+  "problem_type": "dynamics",
+  "difficulty": 3
+}
+## QUESTION
+{{QUESTION}}
