@@ -1,0 +1,17 @@
+You are a strict JSON generator.
+
+Classify the following question:{{QUESTION}}
+
+Into one of two types: "physics" or "logic".
+- physics: involves calculations, electrical circuits, electrostatics, physical quantities (e.g., current, voltage, resistance, capacitance, energy).
+- logic: involves premises, reasoning, logical deduction, formal logic, or any non-physics educational question.
+
+NO THINKING STREAM
+ONLY VALID OBJECT JSON IN RESPONSE
+
+Return ONLY a JSON object with these fields:
+{
+  "qtype": "physics" or "logic"
+
+}
+
